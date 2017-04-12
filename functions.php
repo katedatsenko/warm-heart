@@ -117,6 +117,50 @@ function warm_heart_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'warm_heart_scripts' );
 
+function loadScriptSite(){
+    /*
+     * get_template_directory_uri()
+     * Получает URL текущей темы. Учитывает SSL. Не учитывает наличие дочерней темы. Не содержит закрывающий слэш.
+     * https://wp-kama.ru/function/get_template_directory_uri
+     */
+    $version = null;
+    wp_register_style(
+        'WarmHeart-bootstrap', //$handle
+        get_template_directory_uri().'/bootstrap/css/bootstrap.css', // $src
+        array(), //$deps,
+        $version // $ver
+    );
+   wp_register_style(
+        'WarmHeart-main', //$handle
+        get_template_directory_uri().'/main.css', // $src
+        array(), //$deps,
+        $version // $ver
+    );
+    wp_enqueue_style('WarmHeart-bootstrap');
+    wp_enqueue_style('WarmHeart-main');
+
+    wp_register_script(
+        'WarmHeart', //$handle
+        get_template_directory_uri().'/bootstrap/js/bootstrap.js', //$src
+        array(
+            'jquery'
+        ), //$deps
+        $version, //$ver
+        true //$$in_footer
+    );
+    
+    wp_enqueue_script('WarmHeart');
+}
+add_action( 'wp_enqueue_scripts', 'loadScriptSite');
+
+function registerNavMenu() {
+      register_nav_menu( 'menu', 'Primary Menu' );
+}
+add_action( 'after_setup_theme', 'registerNavMenu' ); 
+
+add_theme_support( 'post-thumbnails' );
+
+
 /**
  * Implement the Custom Header feature.
  */
@@ -141,3 +185,71 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+
+/**
+ * Load TGM Plugin Activation.
+ */
+require get_template_directory() . '/tgm-plugin-activation/warm-heart-tgm-plugin-activation.php';
+
+
+/**
+ * Custom Post Type Cat
+ */
+function my_custom_post_cat() {
+    $labels = array(
+        'name'               => _x( 'Коты', 'post type general name' ),
+        'singular_name'      => _x( 'Кот', 'post type singular name' ),
+        'add_new'            => _x( 'Добавить', 'cat' ),
+        'add_new_item'       => __( 'Добавить' ),
+        'edit_item'          => __( 'Редактировать' ),
+        'new_item'           => __( 'Новый котик' ),
+        'all_items'          => __( 'Все котики' ),
+        'view_item'          => __( 'Просмотр котиков' ),
+        'search_items'       => __( 'Поиск котиков' ),
+        'not_found'          => __( 'Кот не найден' ),
+        'not_found_in_trash' => __( 'Кот не найден в корзине' ), 
+        'parent_item_colon'  => '',
+        'menu_name'          => 'Коты'
+    );
+    $args = array(
+        'labels'        => $labels,
+        'description'   => 'Holds our products and product specific data',
+        'public'        => true,
+        'menu_position' => 5,
+        'supports'      => array( 'title', 'editor', 'thumbnail' ),
+    );
+    register_post_type( 'cat', $args );    
+    flush_rewrite_rules(false);
+}
+add_action( 'init', 'my_custom_post_cat' );
+
+/**
+ * Custom Post Type Dog
+ */
+function my_custom_post_dog() {
+    $labels = array(
+        'name'               => _x( 'Собаки', 'post type general name' ),
+        'singular_name'      => _x( 'Собака', 'post type singular name' ),
+        'add_new'            => _x( 'Добавить', 'dog' ),
+        'add_new_item'       => __( 'Добавить' ),
+        'edit_item'          => __( 'Редактировать' ),
+        'new_item'           => __( 'Новая собачка' ),
+        'all_items'          => __( 'Все собачки' ),
+        'view_item'          => __( 'Просмотр собачек' ),
+        'search_items'       => __( 'Поиск собачек' ),
+        'not_found'          => __( 'Собака не найдена' ),
+        'not_found_in_trash' => __( 'Собака не найдена в корзине' ), 
+        'parent_item_colon'  => '',
+        'menu_name'          => 'Собаки'
+    );
+    $args = array(
+        'labels'        => $labels,
+        'description'   => 'Holds our products and product specific data',
+        'public'        => true,
+        'menu_position' => 5,
+        'supports'      => array( 'title', 'editor', 'thumbnail' ),
+    );
+    register_post_type( 'dog', $args );    
+    flush_rewrite_rules(false);
+}
+add_action( 'init', 'my_custom_post_dog' );

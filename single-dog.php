@@ -9,29 +9,27 @@
 
 get_header(); ?>
 
-	<div class="col-md-8">
-		<div id="primary" class="content-area">
+	<div id="primary" class="content-area single-dog">
 		<main id="main" class="site-main" role="main">
 
 		<?php
 		while ( have_posts() ) : the_post();
+			
+			echo get_the_post_thumbnail();
 
 			get_template_part( 'template-parts/content', get_post_format() );
-
-			the_post_navigation();
-
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
-			endif;
+			?> 
+			<label>Пол: </label><?php echo fw_get_db_post_option($post_id, 'option_switch'); ?> <br>
+			<label>Возраст: </label><?php echo fw_get_db_post_option($post_id, 'option_slider') . " лет" ;  ?>
+			<?php
+			
 
 		endwhile; // End of the loop.
 		?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
-	</div>
 
 <?php
-get_sidebar();
+
 get_footer();
