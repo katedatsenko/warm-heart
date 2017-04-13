@@ -350,3 +350,13 @@ h2 > a:visited {
 a:visited {
 	color: #464646;
 }
+@media only screen and (max-width: 992px) {
+	.fw-btn-1 {
+	    width: 100%;
+	}
+}
+@media only screen and (max-width: 295px) {
+	.fw-btn-1 {
+	    font-size: 8px !important;
+	}
+}
